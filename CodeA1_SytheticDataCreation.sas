@@ -251,3 +251,10 @@ PROC EXPORT DATA= did.did_sim
             OUTFILE= "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.dta" 
             DBMS=STATA REPLACE;
 RUN;
+
+/*Convert to csv file*/
+libname did "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final";
+PROC EXPORT DATA= did.did_sim 
+            OUTFILE= "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.csv" 
+            DBMS=CSV REPLACE;
+RUN;
