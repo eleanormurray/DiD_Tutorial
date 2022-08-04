@@ -7,13 +7,13 @@
 /*To create labeled output tables matching the paper, run this style template*/
 /*After finishing the tutorial, run the template reset code at the bottom of this file*/
 proc format;
-	value Postfmt   0 = "Pre-DBT"
-				    1 = "Post-DBT";
+	value Postfmt   0 = "Pre_DBT"
+				    1 = "Post_DBT";
     value DBTfmt    0 = "Control"
 				    1 = "Intervention";
-	value timefmt -12 = "Pre-COVID"
+	value timefmt -12 = "Pre_COVID"
 				   	0 = "Baseline"
-				    1 = "Follow-up";
+				    1 = "Follow_up";
 
 	value stratafmt 11 = "Sealer, Very challenging"
 					12 = "Sealer, Somewhat challenging"
