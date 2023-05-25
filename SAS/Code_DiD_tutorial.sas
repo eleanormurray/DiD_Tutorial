@@ -25,26 +25,6 @@ run;
 filename style "<path>";
 %include style(tutorial_style_template);
 
-/*Required formats: run if not using style file*/
-proc format;
-	value Postfmt   0 = "Pre_DBT"
-				    1 = "Post_DBT";
-    value DBTfmt    0 = "Control"
-				    1 = "Intervention";
-	value timefmt -12 = "Pre_COVID"
-				   	0 = "Baseline"
-				    1 = "Follow_up";
-
-	value stratafmt 11 = "Sealer, Very challenging"
-					12 = "Sealer, Somewhat challenging"
-					13 = "Sealer, Not challenging"
-					21 = "Stapler, Very challenging"
-					22 = "Stapler, Somewhat challenging"
-					23 = "Stapler, Not challenging"
-					31 = "Other device, Very challenging"
-					32 = "Other device,Somewhat challenging"
-					33 = "Other device,Not challenging" ;
-run;
 
 /*Get familiarized with the data*/
 proc contents data = did_sim;
