@@ -251,10 +251,10 @@ PROC EXPORT DATA= did.did_sim
             OUTFILE= "<path>\did_sim.dta" 
             DBMS=STATA REPLACE;
 RUN;
-
 /*Convert to csv file*/
 libname did "<path>";
 PROC EXPORT DATA= did.did_sim 
             OUTFILE= "<path>\did_sim.csv" 
             DBMS=CSV REPLACE;
 RUN;
+
