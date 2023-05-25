@@ -5,7 +5,7 @@
 /*************************************************************/
 
 /*When running >100 bootstraps, run the code below to store  the log as external file so that bootstraps don't overwhelm display memory*/
-proc printto log = "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\log.rtf";
+proc printto log = "<path>\log.rtf";
 run;
 
 /**********************************************************/
