@@ -240,21 +240,21 @@ drop e_challenge e_type log_tot_notechs e_dept e_interv e_time;
 run;
 
 /*export simulated data*/
-libname methods "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final";
+libname methods "<path>";
 data methods.did_sim;
 set did;
 run;
 
 /*Convert to stata file*/
-libname did "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final";
+libname did "<path>";
 PROC EXPORT DATA= did.did_sim 
-            OUTFILE= "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.dta" 
+            OUTFILE= "<path>\did_sim.dta" 
             DBMS=STATA REPLACE;
 RUN;
 
 /*Convert to csv file*/
-libname did "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final";
+libname did "<path>";
 PROC EXPORT DATA= did.did_sim 
-            OUTFILE= "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.csv" 
+            OUTFILE= "<path>\did_sim.csv" 
             DBMS=CSV REPLACE;
 RUN;
