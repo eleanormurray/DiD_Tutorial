@@ -8,7 +8,7 @@
 /******************************************/
 
 /* Set directory to your location */
-libname tutorial "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final";
+libname tutorial "<path>";
 
 /*Read in data and count the number of observations*/
 data did_sim;
