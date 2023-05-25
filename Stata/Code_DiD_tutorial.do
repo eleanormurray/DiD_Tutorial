@@ -7,9 +7,8 @@
 /******************************************/
 /*Code Section 0: Data set up & formatting*/
 /******************************************/
+use "<file location>\did_sim.dta", clear
 
-
-use "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.dta", clear
 
 label define postfmt 0 "Pre-DBT"  1 "Post-DBT"
 label define dbtfmt 0 "Control" 1 "Intervention"
@@ -45,18 +44,18 @@ reg tot_notechs i.post_covid##i.dbt_grp if time <= 0
 /*CODE SECTION 2: Unadjusted models******************/
 /***************************************************/
 /*Code 2.1: Unadjusted linear regression, excluding pre-COVID data*/
-reg tot_notechs time i.post_dbt##i.dbt_grp if time >=0, cluster(dept)
+reg tot_notechs i.post_dbt##i.dbt_grp if time >=0, cluster(dept)
 
 /*Optional Code 2.1.2: Create table of predicted outcome values & DiD*/
 /*Note, that the margins command performs many different linear predictor tasks. */
 /*The code below is correct for standardization of our DiD estimates for this example but may not be appropriate for other examples. */
 /*The code below also does not output the robust standard errors*/
 /*Use margins with caution!*/
-quietly margins post_dbt#dbt_grp if time >=0, at(time = (0 1)) post
+quietly margins post_dbt#dbt_grp if time >=0, post
 margins, coeflegend
 matrix input lin_unadj = (.,. ,. ,. ,. )
-matrix lin_unadj = (_b[1bn._at#0bn.post_dbt#1.dbt_grp], _b[2._at#1.post_dbt#1.dbt_grp],.)
-matrix lin_unadj = (lin_unadj  \  _b[1bn._at#0bn.post_dbt#0bn.dbt_grp], _b[2._at#1.post_dbt#0bn.dbt_grp],  ((_b[2bn._at#1bn.post_dbt#1.dbt_grp]-_b[1bn._at#0bn.post_dbt#1.dbt_grp])-(_b[2bn._at#1bn.post_dbt#0bn.dbt_grp]- _b[1bn._at#0bn.post_dbt#0bn.dbt_grp])))
+matrix lin_unadj = ( _b[0bn.post_dbt#1.dbt_grp], _b[1.post_dbt#1.dbt_grp],.)
+matrix lin_unadj = (lin_unadj  \  _b[0bn.post_dbt#0bn.dbt_grp], _b[1.post_dbt#0bn.dbt_grp],  ((_b[1.post_dbt#1.dbt_grp]- _b[0bn.post_dbt#1.dbt_grp])-(_b[1.post_dbt#0bn.dbt_grp]-  _b[0bn.post_dbt#0bn.dbt_grp])))
 matrix rownames lin_unadj = Intervention Control 
 matrix colnames lin_unadj = Pre-DBT Post-DBT DiD
 matrix list lin_unadj
@@ -112,13 +111,13 @@ forvalues i = 1/3{
 	forvalues k = 1/3{
 		local j = `j'+1
 		local s = `i'*10+`k'
-		summarize e_notechs if (post_dbt == 0 & dbt_grp ==0 & strata == `s')
+		quietly summarize e_notechs if (post_dbt == 0 & dbt_grp ==0 & strata == `s')
 		matrix  cDiD = (cDiD \ `i'*10+`k', `r(mean)', ., ., ., ., ., .)
-		summarize e_notechs if (post_dbt == 0 & dbt_grp ==1 & strata == `s')
+		quietly summarize e_notechs if (post_dbt == 0 & dbt_grp ==1 & strata == `s')
 		matrix  cDiD[`j',3] = `r(mean)'
-		summarize e_notechs if (post_dbt == 1 & dbt_grp ==0 & strata == `s')
+		quietly summarize e_notechs if (post_dbt == 1 & dbt_grp ==0 & strata == `s')
 		matrix  cDiD[`j',4] = `r(mean)'
-		summarize e_notechs if (post_dbt == 1 & dbt_grp ==1 & strata == `s')
+		quietly summarize e_notechs if (post_dbt == 1 & dbt_grp ==1 & strata == `s')
 		matrix  cDiD[`j',5] = `r(mean)'
 		matrix cDiD[`j',6] = cDiD[`j',5]- cDiD[`j',4] 
 		matrix cDiD[`j',7] = cDiD[`j',3]- cDiD[`j',2] 
@@ -133,6 +132,7 @@ matrix list cDiD
 *run 3.1.1 to create stratum-specific estimates, then run the code below to get strata distributions*
 matrix list cDiD
 tab case_challenge device if post_covid ==1, cell
+tab strata if post_covid == 1
 
 /*Code 3.3: Standardizing the estimated outcome to obtain a Marginal DiD estimator*/
 /*Option 2: the short way! Using Stata's built in margins command*/
@@ -149,7 +149,7 @@ matrix list lin_adj
 
 /*Code 3.4: Standardizing the estimated outcome to obtain a Marginal DiD estimator*/
 /*Option 3: the super short way! Using copies of the data*/
-use "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.dta", clear
+use "\did_sim.dta", clear
 
 *i.Data set up for standardization: create 6 copies of each subject*
 *first, duplicate the dataset and create a variable 'interv' which indicates which copy is the duplicate (interv =1)
@@ -202,7 +202,8 @@ matrix list lin_stdz
 /********************************************************************************/
 /********Code Section A3: Adjusted Poisson regression****************************/
 /********************************************************************************/
-use "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.dta", clear
+use "did_sim.dta", clear
+
 /*Code Section A3.1: Adjusted Poisson regression with standaridzation using margins command*/
 poisson tot_notechs time ib(last).post_dbt##ib(last).dbt_grp ib(last).case_challenge##ib(last).device, cluster(dept) irr
 margins  post_dbt#dbt_grp if time >=0, at(time = (0 1)) post
@@ -243,10 +244,8 @@ forvalues i = 1/3{
 }
 matrix list cDiD_pois
 
-
-
 /*Code A3.3: Standardizing the estimated outcome to obtain a Marginal DiD estimator*/
-use "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final\did_sim.dta", clear
+use "did_sim.dta", clear
 
 *i.Data set up for standardization: create 6 copies of each subject*
 *first, duplicate the dataset and create a variable 'interv' which indicates which copy is the duplicate (interv =1)
@@ -276,7 +275,7 @@ replace time = 1 if   inlist(interv, 2,3)
 by post_dbt dbt_grp time, sort: tab interv
  
  
-/*Adjusted linear regression*/
+/*Adjusted Poisson regression*/
 poisson tot_notechs time ib(last).post_dbt##ib(last).dbt_grp ib(last).case_challenge##ib(last).device, cluster(dept) irr
 predict predY_p if time >=0
 *Output standardized point estimates and difference*
