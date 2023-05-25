@@ -22,7 +22,7 @@ set tutorial.did_sim end = _end_  ;
 run;
 
 /*Optional: Format to make output easier to read*/
-filename style "C:\Users\ejmurray\Dropbox\ProjectManagement\Collaborations\AriadneLabs\SafeSurgery-DBT\MethodsPaper\Final";
+filename style "<path>";
 %include style(tutorial_style_template);
 
 /*Required formats: run if not using style file*/
