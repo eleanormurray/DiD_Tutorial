@@ -3,6 +3,7 @@ A tutorial on the implementation of difference-in-difference (DiD) analyses usin
 
 The tutorial code and data here are supplementary material to:
 Rothbard S, Etheridge JC, Murray EJ. A Tutorial on Applying the Difference-in-Difference Method to Health Data. _Current Epidemiology Reports_. 2023. [in press] doi: 10.1007/s40471-023-00327-x
+https://link.springer.com/article/10.1007/s40471-023-00327-x 
 
 The version of code, data, and materials at the time of publication acceptance are included in the published release:
 
